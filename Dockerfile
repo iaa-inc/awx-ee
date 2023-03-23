@@ -1,4 +1,4 @@
-FROM quay.io/ansible/awx-ee:latest
+FROM quay.io/ansible/awx-ee:21.13.0
 
 RUN pip install arouteserver==1.1.0 && curl -sSL https://install.python-poetry.org | python3 -
 
