@@ -16,8 +16,7 @@ ENV PATH "$HOME/.local/bin/:$HOME/.poetry/bin:$PATH"
 
 COPY requirements.txt /tmp/requirements.txt
 
-RUN pip3 install -r /tmp/requirements.txt \
-    && rm -rf /tmp/requirements.txt
+RUN pip3 install -r /tmp/requirements.txt
 
 RUN ansible-galaxy collection install community.network
 
