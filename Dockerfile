@@ -1,17 +1,20 @@
 FROM quay.io/ansible/awx-ee:21.13.0
 
-RUN pip install arouteserver==1.1.0 && curl -sSL https://install.python-poetry.org | python3 -
+USER root
 
-RUN pip install envs
+ADD bgpq3-0.1.36.1-1.el8.x86_64.rpm /tmp/bgpq3-0.1.36.1-1.el8.x86_64.rpm
+
+RUN yum install -y /tmp/bgpq3-0.1.36.1-1.el8.x86_64.rpm \
+    && yum clean all \
+    && rm -rf /var/cache/yum \
+    && rm -rf /tmp/bgpq3- \
+    && curl -sSL https://install.python-poetry.org | python3 -
 
 ENV PATH "$HOME/.local/bin/:$HOME/.poetry/bin:$PATH"
 
-RUN arouteserver setup --dest-dir ~/arouteserver 
+COPY requirements.txt /tmp/requirements.txt
 
-USER root
-
-ADD bgpq3-0.1.36.1-1.el8.x86_64.rpm /tmp/bgpq3-0.1.36.1-1.el8.x86_64.rpm 
-
-RUN yum install -y /tmp/bgpq3-0.1.36.1-1.el8.x86_64.rpm
+RUN pip3 install -r /tmp/requirements.txt
 
 USER 1000
+RUN arouteserver setup --dest-dir ~/arouteserver
